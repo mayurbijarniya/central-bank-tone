@@ -5,6 +5,7 @@ import { SiteFooter } from "@/components/site-footer"
 import { SiteHeader } from "@/components/site-header"
 import { ThemeProvider } from "@/components/theme-provider"
 import { TooltipProvider } from "@/components/ui/tooltip"
+import { SITE_URL } from "@/lib/site"
 
 import "./globals.css"
 
@@ -12,12 +13,14 @@ const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] })
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] })
 
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
   title: {
     default: "Central Bank Tone",
     template: "%s · Central Bank Tone",
   },
   description:
     "Hawkish and dovish tone in 30 years of central bank speeches, read by language models and tested against every rate decision.",
+  openGraph: { type: "website", siteName: "Central Bank Tone", url: "/" },
 }
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
