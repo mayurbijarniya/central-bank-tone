@@ -7,16 +7,13 @@ export function NextStep({ href, label, text }: { href: string; label: string; t
     <Link
       href={href}
       transitionTypes={["nav-forward"]}
-      className="group flex flex-col gap-1 border-t pt-8 sm:flex-row sm:items-center sm:justify-between"
+      className="group flex flex-col gap-1 bg-muted/60 p-6 transition-colors hover:bg-muted sm:flex-row sm:items-center sm:justify-between sm:p-8"
     >
       <span className="space-y-1">
-        <span className="block text-xs font-medium tracking-wider text-muted-foreground uppercase">
-          Next
-        </span>
-        <span className="block text-xl font-semibold tracking-tight">{label}</span>
+        <span className="block text-xl font-semibold tracking-tight">Next: {label}</span>
         <span className="block text-muted-foreground">{text}</span>
       </span>
-      <span className="mt-3 flex size-10 shrink-0 items-center justify-center rounded-full border transition-transform group-hover:translate-x-1 sm:mt-0">
+      <span className="mt-3 flex size-10 shrink-0 items-center justify-center rounded-full bg-background transition-transform group-hover:translate-x-1 sm:mt-0">
         <ArrowRight className="size-4" />
       </span>
     </Link>

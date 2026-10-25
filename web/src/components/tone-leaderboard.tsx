@@ -15,7 +15,6 @@ export function ToneLeaderboard({ banks, asOf }: { banks: Bank[]; asOf: string }
 
   return (
     <Section
-      eyebrow="Right now"
       title="Who sounds most hawkish"
       description={
         <>
@@ -41,7 +40,7 @@ export function ToneLeaderboard({ banks, asOf }: { banks: Bank[]; asOf: string }
               <Link
                 href={`/banks/${bank.code}`}
                 transitionTypes={["nav-forward"]}
-                className="grid grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)_3.5rem] items-center gap-x-4 rounded-md py-2 text-sm transition-colors hover:bg-muted/60"
+                className="grid grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)_3.5rem] items-center gap-x-4 py-2 text-sm transition-colors hover:bg-muted/60"
               >
                 <span className="flex min-w-0 items-center gap-2 pl-1">
                   <span aria-hidden>{flag(bank.code)}</span>
@@ -58,7 +57,7 @@ export function ToneLeaderboard({ banks, asOf }: { banks: Bank[]; asOf: string }
                     style={{ width: `${(Math.abs(tone) / scale) * 50}%` }}
                   />
                 </span>
-                <span className="pr-1 text-right font-mono tabular-nums">{signed(tone)}</span>
+                <span className="pr-1 text-right tabular-nums">{signed(tone)}</span>
               </Link>
             </li>
           )

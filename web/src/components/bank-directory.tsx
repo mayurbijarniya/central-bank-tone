@@ -35,8 +35,8 @@ export function BankDirectory({ banks }: { banks: Bank[] }) {
         if (!inRegion.length) return null
         return (
           <section key={region} className="space-y-2">
-            <h2 className="text-xs font-medium tracking-wider text-muted-foreground uppercase">
-              {region} · {inRegion.length}
+            <h2 className="text-lg font-semibold tracking-tight">
+              {region} <span className="font-normal text-muted-foreground">{inRegion.length}</span>
             </h2>
             <ul className="grid border-t sm:grid-cols-2 sm:gap-x-10">
               {inRegion.map((bank) => (
@@ -44,7 +44,7 @@ export function BankDirectory({ banks }: { banks: Bank[] }) {
                   <Link
                     href={`/banks/${bank.code}`}
                     transitionTypes={["nav-forward"]}
-                    className="group flex items-center gap-3 rounded-md px-1 py-3 transition-colors hover:bg-muted/60"
+                    className="group flex items-center gap-3 px-1 py-3 transition-colors hover:bg-muted/60"
                   >
                     <span className="text-2xl leading-none" aria-hidden>
                       {flag(bank.code)}

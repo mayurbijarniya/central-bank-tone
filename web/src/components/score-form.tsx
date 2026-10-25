@@ -1,6 +1,6 @@
 "use client"
 
-import { LoaderCircle, Sparkles } from "lucide-react"
+import { LoaderCircle } from "lucide-react"
 import { useState } from "react"
 
 import { ToneBadge } from "@/components/tone-badge"
@@ -83,7 +83,7 @@ export function ScoreForm() {
           maxLength={MAX_CHARACTERS}
         />
         <Button onClick={score} disabled={status !== null || !text.trim()} size="lg" className="w-full">
-          {status ? <LoaderCircle className="animate-spin" /> : <Sparkles />}
+          {status && <LoaderCircle className="animate-spin" />}
           {status ?? "Score tone"}
         </Button>
         {error && <p className="text-sm text-destructive">{error}</p>}
@@ -101,7 +101,7 @@ export function ScoreForm() {
           </p>
         </div>
         {result === null ? (
-          <p className="rounded-lg bg-muted/50 p-10 text-center text-sm text-muted-foreground">
+          <p className="bg-muted/60 p-10 text-center text-sm text-muted-foreground">
             Scores appear here.
           </p>
         ) : result.tone === null ? (
@@ -113,7 +113,7 @@ export function ScoreForm() {
           <>
             <div className="space-y-2">
               <div className="flex items-baseline justify-between">
-                <span className="font-mono text-4xl font-semibold tabular-nums">{signed(result.tone)}</span>
+                <span className="text-4xl font-semibold tabular-nums">{signed(result.tone)}</span>
                 <span className="text-sm text-muted-foreground capitalize">
                   {stance(result.tone)} · {result.policySentences} policy{" "}
                   {result.policySentences === 1 ? "sentence" : "sentences"}
@@ -134,7 +134,7 @@ export function ScoreForm() {
               {result.sentences.map((s, i) => (
                 <li
                   key={i}
-                  className={cn("rounded-r-md border-l-4 px-3 py-2 text-sm", ROW[stance(s.tone) ?? "balanced"])}
+                  className={cn("border-l-4 px-3 py-2 text-sm", ROW[stance(s.tone) ?? "balanced"])}
                 >
                   <div className="flex items-start justify-between gap-3">
                     <p className="leading-relaxed">{s.sentence}</p>

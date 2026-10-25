@@ -17,7 +17,7 @@ export function ToneBadge({ tone, className }: { tone: number | null; className?
   if (kind === null) return <span className="text-muted-foreground">–</span>
   const Icon = ICONS[kind]
   return (
-    <Badge variant="secondary" className={cn("font-mono tabular-nums", STYLES[kind], className)}>
+    <Badge variant="secondary" className={cn("tabular-nums", STYLES[kind], className)}>
       <Icon data-icon="inline-start" />
       {signed(tone)}
     </Badge>

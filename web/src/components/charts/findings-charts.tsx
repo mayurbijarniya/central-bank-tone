@@ -16,7 +16,7 @@ function Tip({ lines }: { lines: [string, string][] }) {
         ) : (
           <div key={label} className="flex justify-between gap-6">
             <span className="text-muted-foreground">{label}</span>
-            <span className="font-mono tabular-nums">{value}</span>
+            <span className="tabular-nums">{value}</span>
           </div>
         ),
       )}
@@ -39,7 +39,7 @@ function EndLabel({ x, y, width, height, value }: LabelProps) {
       y={by + bh / 2}
       dominantBaseline="central"
       textAnchor={positive ? "start" : "end"}
-      className="fill-muted-foreground font-mono text-[11px] tabular-nums"
+      className="fill-muted-foreground text-[11px] tabular-nums"
     >
       {signed(v)}
     </text>
@@ -172,7 +172,7 @@ export function DecisionToneChart({ rows }: { rows: Summary["beforeDecisions"] }
                   y={labelY}
                   textAnchor="middle"
                   dominantBaseline={v >= 0 ? "auto" : "hanging"}
-                  className="fill-foreground font-mono text-xs font-medium tabular-nums"
+                  className="fill-foreground text-xs font-medium tabular-nums"
                 >
                   {signed(v, 3)}
                 </text>

@@ -25,7 +25,6 @@ const POINTS = [
 export function ToneScale() {
   return (
     <Section
-      eyebrow="Reading the numbers"
       title="What tone means"
       description="Every sentence about policy, prices, rates or the economy gets a score from −1 to +1: how strongly it leans towards higher or lower interest rates. A speech's tone is the average of its sentences; a bank's is the average of its recent speeches."
     >
@@ -35,7 +34,7 @@ export function ToneScale() {
           {POINTS.map((point) => (
             <div key={point.label} className="space-y-1.5 sm:text-center sm:first:text-left sm:last:text-right">
               <p className={`font-medium ${point.className}`}>
-                {point.label} <span className="font-mono">{point.tone}</span>
+                {point.label} <span className="tabular-nums">{point.tone}</span>
               </p>
               <p className="text-sm text-muted-foreground">{point.text}</p>
             </div>

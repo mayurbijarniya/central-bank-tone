@@ -16,20 +16,17 @@ function modelName(id: string): string {
 }
 
 function Question({
-  n,
   title,
   verdict,
   children,
 }: {
-  n: number
   title: string
   verdict: ReactNode
   children: ReactNode
 }) {
   return (
-    <section className="reveal space-y-8 border-t pt-12">
+    <section className="reveal space-y-8 pt-16">
       <div className="max-w-3xl space-y-3">
-        <p className="font-mono text-xs text-muted-foreground">QUESTION {n}</p>
         <h2 className="text-3xl font-semibold tracking-tight text-balance">{title}</h2>
         <div className="text-lg text-muted-foreground text-pretty">{verdict}</div>
       </div>
@@ -67,7 +64,6 @@ export default async function FindingsPage() {
       </header>
 
       <Question
-        n={1}
         title="Can a cheap model read central bank tone?"
         verdict={
           <>
@@ -110,7 +106,6 @@ export default async function FindingsPage() {
       </Question>
 
       <Question
-        n={2}
         title="Does tone move with policy?"
         verdict={
           <>
@@ -150,7 +145,7 @@ export default async function FindingsPage() {
                 ].map(([label, value]) => (
                   <div key={label as string} className="flex justify-between gap-4 py-2.5">
                     <dt className="text-muted-foreground">{label}</dt>
-                    <dd className="font-mono tabular-nums">{signed(value as number)}</dd>
+                    <dd className="tabular-nums">{signed(value as number)}</dd>
                   </div>
                 ))}
               </dl>
@@ -160,7 +155,6 @@ export default async function FindingsPage() {
       </Question>
 
       <Question
-        n={3}
         title="Does tone predict the next decision?"
         verdict={
           <>
@@ -198,10 +192,10 @@ export default async function FindingsPage() {
                       <TableCell className="text-muted-foreground">
                         {key === "baseline" ? "Past rates and inflation" : "plus speech tone"}
                       </TableCell>
-                      <TableCell className="text-right font-mono tabular-nums">
+                      <TableCell className="text-right tabular-nums">
                         {model[key].test.log_loss.toFixed(3)}
                       </TableCell>
-                      <TableCell className="text-right font-mono tabular-nums">
+                      <TableCell className="text-right tabular-nums">
                         {percent(model[key].test.move_accuracy)}
                       </TableCell>
                     </TableRow>

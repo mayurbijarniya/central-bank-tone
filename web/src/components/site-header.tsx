@@ -22,8 +22,8 @@ export function SiteHeader() {
   const links = useRef<(HTMLAnchorElement | null)[]>([])
   const [indicator, setIndicator] = useState<Indicator | null>(null)
 
-  // The highlight sits behind the links and slides to the active one with a CSS
-  // transition, so it never covers their text.
+  // The active page is marked by a bar along the header's bottom edge that slides
+  // to the current link with a CSS transition.
   useLayoutEffect(() => {
     const measure = () => {
       const link = links.current[current]
@@ -37,9 +37,9 @@ export function SiteHeader() {
   return (
     <header
       style={{ viewTransitionName: "site-header" }}
-      className="sticky top-0 z-40 border-b bg-background/85 backdrop-blur supports-backdrop-filter:bg-background/70"
+      className="sticky top-0 z-40 border-b bg-background"
     >
-      <div className="mx-auto flex h-14 w-full max-w-6xl items-center gap-4 px-4 sm:px-6">
+      <div className="mx-auto flex h-14 w-full max-w-6xl items-stretch gap-4 px-4 sm:px-6">
         <Link
           href="/"
           transitionTypes={["nav-back"]}
@@ -48,11 +48,11 @@ export function SiteHeader() {
           <Logo className="size-7" />
           <span className="hidden md:inline">Central Bank Tone</span>
         </Link>
-        <nav className="relative -mx-1 flex flex-1 items-center gap-0.5 overflow-x-auto text-sm">
+        <nav className="relative flex flex-1 items-stretch gap-1 overflow-x-auto text-sm [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           {indicator && (
             <span
               aria-hidden
-              className="absolute inset-y-1.5 rounded-md bg-muted transition-[left,width] duration-300 ease-out motion-reduce:transition-none"
+              className="absolute bottom-0 h-0.5 bg-foreground transition-[left,width] duration-300 ease-out motion-reduce:transition-none"
               style={{ left: indicator.left, width: indicator.width }}
             />
           )}
@@ -68,7 +68,7 @@ export function SiteHeader() {
                 transitionTypes={[direction(pathname, page.href)]}
                 aria-current={active ? "page" : undefined}
                 className={cn(
-                  "relative rounded-md px-2.5 py-1.5 whitespace-nowrap text-muted-foreground transition-colors hover:text-foreground",
+                  "flex items-center px-2.5 whitespace-nowrap text-muted-foreground transition-colors hover:text-foreground focus-visible:text-foreground",
                   active && "font-medium text-foreground",
                 )}
               >
@@ -77,12 +77,14 @@ export function SiteHeader() {
             )
           })}
         </nav>
-        <Button asChild variant="ghost" size="icon" aria-label="Source code on GitHub">
-          <a href={REPOSITORY} target="_blank" rel="noreferrer">
-            <GitHubMark className="size-4" />
-          </a>
-        </Button>
-        <ThemeToggle />
+        <div className="flex items-center gap-1">
+          <Button asChild variant="ghost" size="icon" aria-label="Source code on GitHub">
+            <a href={REPOSITORY} target="_blank" rel="noreferrer">
+              <GitHubMark className="size-4" />
+            </a>
+          </Button>
+          <ThemeToggle />
+        </div>
       </div>
     </header>
   )

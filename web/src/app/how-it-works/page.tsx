@@ -13,7 +13,7 @@ export const metadata: Metadata = { title: "How it works" }
 
 function Part({ title, children }: { title: string; children: ReactNode }) {
   return (
-    <section className="reveal grid gap-4 border-t pt-8 md:grid-cols-[14rem_1fr] md:gap-10">
+    <section className="reveal grid gap-4 pt-6 md:grid-cols-[14rem_1fr] md:gap-10">
       <h2 className="text-lg font-semibold tracking-tight">{title}</h2>
       <div className="max-w-3xl space-y-4 text-muted-foreground [&_strong]:font-medium [&_strong]:text-foreground">
         {children}

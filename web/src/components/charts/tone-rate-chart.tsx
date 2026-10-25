@@ -105,7 +105,7 @@ export function ToneRateChart({ tone, rates }: { tone: TonePoint[]; rates: RateP
             </LineChart>
           </ChartContainer>
         ) : (
-          <p className="rounded-lg bg-muted/50 p-6 text-center text-sm text-muted-foreground">
+          <p className="bg-muted/60 p-6 text-center text-sm text-muted-foreground">
             The BIS does not publish a policy rate for this central bank, so only its tone is
             shown.
           </p>

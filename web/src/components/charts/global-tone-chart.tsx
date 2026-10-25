@@ -27,7 +27,6 @@ export function GlobalToneChart({ points }: { points: GlobalPoint[] }) {
 
   return (
     <Section
-      eyebrow="Around the world"
       title="How hawkish central banks sound, month by month"
       description="The average tone of the tested central banks' speeches over the previous three months. Tone turned sharply dovish in 2008 and 2020 and swung hawkish as inflation rose in 2022."
       action={<RangeToggle value={range} onChange={setRange} />}
