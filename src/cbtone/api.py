@@ -1,10 +1,11 @@
-"""The scoring API behind the website's "Score a speech" page.
+"""A scoring API, for scoring text from other programs.
 
     uvicorn cbtone.api:app --port 8000
 
 POST /score takes speech text and returns the tone of each policy sentence,
 using the same saved scorer and embedding model as the archive. The model loads
-once, on the first request.
+once, on the first request. The website does the same in the browser
+(web/src/lib/tone.ts), so it needs no server.
 """
 
 from __future__ import annotations

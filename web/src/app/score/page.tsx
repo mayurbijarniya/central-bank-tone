@@ -11,9 +11,10 @@ export default function ScorePage() {
       <header className="max-w-3xl space-y-3 pt-6">
         <h1 className="text-4xl font-semibold tracking-tight">Score a speech</h1>
         <p className="text-lg text-muted-foreground text-pretty">
-          The same local model that scored the archive: sentence embeddings from bge-small and a
-          classifier trained on human and language-model labels. It agrees with people about six
-          times in ten on single sentences, so read a whole passage rather than one line.
+          The same local model that scored the archive, running in your browser: sentence
+          embeddings from bge-small and a classifier trained on human and language-model labels.
+          It agrees with people about six times in ten on single sentences, so read a whole
+          passage rather than one line.
         </p>
       </header>
       <ScoreForm />

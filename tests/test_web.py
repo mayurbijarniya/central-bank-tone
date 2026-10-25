@@ -31,3 +31,8 @@ def test_written_json_is_compact(tmp_path, monkeypatch):
     web._write("x/y.json", {"value": 1.0})
     assert json.loads((tmp_path / "x" / "y.json").read_text()) == {"value": 1.0}
     assert " " not in (tmp_path / "x" / "y.json").read_text()
+
+
+def test_site_scores_with_the_saved_scorer():
+    site = web.paths.WEB_DATA / "scorer.json"
+    assert site.read_bytes() == web.paths.SCORER.read_bytes()

@@ -6,7 +6,7 @@ model, and tested against every policy rate decision of 21 central banks.**
 
 ![python](https://img.shields.io/badge/python-3.11%2B-blue)
 ![nlp](https://img.shields.io/badge/NLP-LLM%20labels%20%2B%20embeddings-8a2be2)
-![web](https://img.shields.io/badge/web-Next.js%20%2B%20FastAPI-000000)
+![web](https://img.shields.io/badge/web-Next.js%20%2B%20ONNX%20Runtime%20Web-000000)
 ![license](https://img.shields.io/badge/license-MIT-lightgrey)
 
 Interest rates move every price in finance: bonds, stocks, currencies,
@@ -88,8 +88,17 @@ model fit some noise.
 ## The website
 
 A static **Next.js** site reads JSON exported by the pipeline, so every chart
-loads with no server; only "Score a speech" calls a small **FastAPI** service
-running the same local model.
+loads with no server. "Score a speech" runs the local model **in the
+browser**: the same ONNX model file and tokenizer the Python pipeline uses,
+through ONNX Runtime Web (WebAssembly), and the classifier weights from
+`scorer.json`. Pasted text never leaves the visitor's machine. The first score
+downloads the 66 MB model from Hugging Face, and the browser keeps it for later
+visits.
+
+Checked against Python on the label sets and two years of speeches: all 8,647
+sentences tokenize identically, 300 of 300 speeches split into the same policy
+sentences, and on 2,000 sentences the largest difference in tone is 0.002 (on a
+scale from -1 to +1), with 1,999 of 2,000 labels the same.
 
 - **Overview:** the headline numbers, the average tone across central banks
   over 30 years, what a tone score means, which banks sound most hawkish now,
@@ -99,7 +108,8 @@ running the same local model.
   a page for each with its tone and policy rate on one shared timeline and its
   latest speeches.
 - **Findings:** the three questions, each with its answer and charts.
-- **Score a speech:** paste any text and see each policy sentence scored.
+- **Score a speech:** paste any text and see each policy sentence scored, on
+  your own machine.
 - **How it works:** the data, how tone is read and checked, how it is tested,
   the limits, and the tools used.
 
@@ -108,23 +118,23 @@ direction of travel through the navigation (React view transitions, with motion
 turned off for visitors who ask their system for reduced motion).
 
 ```bash
-.venv/bin/uvicorn cbtone.api:app --port 8000      # scoring API
 cd web && npm install && npm run dev               # site on localhost:3000
 ```
 
+The same scorer is also available to other programs as a small **FastAPI**
+service (`.venv/bin/uvicorn cbtone.api:app --port 8000`, then `POST /score`).
+The website does not need it.
+
 ## Deploying
 
-There is no database. The pipeline writes everything the charts need to
-`web/public/data/` (one summary file, the global series, and one file per
-central bank, about 1.8 MB), and those files are committed with the code.
+There is no database and no server. The pipeline writes everything the site
+needs to `web/public/data/` (one summary file, the global series, one file per
+central bank and the scorer's weights, about 1.8 MB), and those files are
+committed with the code.
 
 - **Website (Vercel or any static host).** `npm run build` bakes the JSON into
-  static pages in `web/out/`. On Vercel, set the project root to `web/`.
-- **Scoring API (Render, Railway or any Python host).** Install with
-  `pip install ".[api]"`, start with `uvicorn cbtone.api:app --host 0.0.0.0`,
-  and set `CBTONE_ALLOWED_ORIGINS` to the website's address. Point the site at
-  it with `NEXT_PUBLIC_API_URL`. Every page except "Score a speech" works
-  without it.
+  static pages in `web/out/`. On Vercel, set the project root to `web/`; no
+  environment variables are needed.
 - **New speeches.** `cbtone update` adds them to the tables and rewrites the
   site's JSON; committing and pushing redeploys the site.
 
@@ -138,6 +148,7 @@ central bank, about 1.8 MB), and those files are committed with the code.
 | Modeling | scikit-learn (logistic regression, gradient boosting, grouped cross-validation), SciPy |
 | Data processing | polars, NumPy |
 | Website | Next.js 16 (React 19, TypeScript, static export), Tailwind CSS 4, shadcn/ui, Recharts, lucide icons |
+| Scoring in the browser | ONNX Runtime Web (WebAssembly), a TypeScript port of the tokenizer and sentence filter |
 | API | FastAPI, Uvicorn, Pydantic |
 | Figures | matplotlib |
 | Quality | pytest (synthetic data with known answers), ruff |
@@ -163,13 +174,13 @@ central-bank-tone/
 │   ├── run.py          runs everything and writes the outputs
 │   ├── tables.py       the compact committed tables
 │   ├── web.py          the JSON the website reads
-│   ├── api.py          the scoring API
+│   ├── api.py          the scoring API, for other programs
 │   ├── update.py       adds new speeches to the tables and the site
 │   ├── figures.py, report.py, cli.py
 ├── web/
 │   ├── src/app/        pages: overview, central banks, findings, score, how it works
 │   ├── src/components/ charts, layout and page sections
-│   ├── src/lib/        data loading, formatting, navigation
+│   ├── src/lib/        data loading, formatting, navigation, tone.ts (the in-browser scorer)
 │   └── public/data/    the JSON the pipeline exports
 ├── labels/             every label used, so results reproduce without an API key
 ├── tests/

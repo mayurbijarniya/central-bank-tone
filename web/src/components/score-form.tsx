@@ -7,9 +7,8 @@ import { ToneBadge } from "@/components/tone-badge"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 import { percent, signed, stance } from "@/lib/format"
+import { loadToneModel, MAX_CHARACTERS, type ScoreResult } from "@/lib/tone"
 import { cn } from "@/lib/utils"
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000"
 
 const EXAMPLES = [
   {
@@ -26,21 +25,6 @@ const EXAMPLES = [
   },
 ]
 
-interface Scored {
-  sentence: string
-  tone: number
-  label: "hawkish" | "dovish" | "neutral"
-  hawkish: number
-  dovish: number
-  neutral: number
-}
-
-interface Result {
-  tone: number | null
-  policy_sentences: number
-  sentences: Scored[]
-}
-
 const ROW = {
   hawkish: "border-l-hawk bg-hawk/6",
   dovish: "border-l-dove bg-dove/6",
@@ -49,30 +33,28 @@ const ROW = {
 
 export function ScoreForm() {
   const [text, setText] = useState(EXAMPLES[2].text)
-  const [result, setResult] = useState<Result | null>(null)
+  const [result, setResult] = useState<ScoreResult | null>(null)
   const [error, setError] = useState<string | null>(null)
-  const [loading, setLoading] = useState(false)
+  const [status, setStatus] = useState<string | null>(null)
 
   async function score() {
-    setLoading(true)
+    setStatus("Loading the model…")
     setError(null)
     try {
-      const response = await fetch(`${API_URL}/score`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ text }),
-      })
-      if (!response.ok) throw new Error(`The scoring service answered ${response.status}.`)
-      setResult((await response.json()) as Result)
+      const model = await loadToneModel((share) =>
+        setStatus(`Downloading the model, first time only · ${Math.round(share * 100)}%`),
+      )
+      setStatus("Scoring…")
+      setResult(await model.score(text))
     } catch (err) {
       setResult(null)
       setError(
         err instanceof TypeError
-          ? "The scoring service is not reachable. Start it with `uvicorn cbtone.api:app`."
+          ? "The model could not be downloaded. Check the connection and try again."
           : (err as Error).message,
       )
     } finally {
-      setLoading(false)
+      setStatus(null)
     }
   }
 
@@ -98,12 +80,17 @@ export function ScoreForm() {
           className="min-h-64 resize-y"
           placeholder="Paste a central banker's speech…"
           aria-label="Speech text"
+          maxLength={MAX_CHARACTERS}
         />
-        <Button onClick={score} disabled={loading || !text.trim()} size="lg" className="w-full">
-          {loading ? <LoaderCircle className="animate-spin" /> : <Sparkles />}
-          {loading ? "Scoring…" : "Score tone"}
+        <Button onClick={score} disabled={status !== null || !text.trim()} size="lg" className="w-full">
+          {status ? <LoaderCircle className="animate-spin" /> : <Sparkles />}
+          {status ?? "Score tone"}
         </Button>
         {error && <p className="text-sm text-destructive">{error}</p>}
+        <p className="text-xs text-muted-foreground">
+          Runs in your browser: the text is never sent anywhere. The first score downloads the
+          66 MB model, which is then kept for later visits.
+        </p>
       </div>
 
       <div className="space-y-6 lg:col-span-3">
@@ -128,8 +115,8 @@ export function ScoreForm() {
               <div className="flex items-baseline justify-between">
                 <span className="font-mono text-4xl font-semibold tabular-nums">{signed(result.tone)}</span>
                 <span className="text-sm text-muted-foreground capitalize">
-                  {stance(result.tone)} · {result.policy_sentences} policy{" "}
-                  {result.policy_sentences === 1 ? "sentence" : "sentences"}
+                  {stance(result.tone)} · {result.policySentences} policy{" "}
+                  {result.policySentences === 1 ? "sentence" : "sentences"}
                 </span>
               </div>
               <div className="relative h-2 rounded-full bg-linear-to-r from-dove via-muted to-hawk">

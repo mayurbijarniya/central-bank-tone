@@ -143,3 +143,9 @@ the test results were read; the last does not touch the prediction test.
   the same 150 sentences, and the report gives their agreement and Cohen's
   kappa. That measures agreement between models, not accuracy, and is
   reported as such.
+- **Scoring on the website** was planned as calls to the FastAPI service. It
+  moved into the browser instead, so the site needs no server: the same ONNX
+  model file and tokenizer, ONNX Runtime Web, and the saved weights. Before
+  switching, it was checked against Python: identical tokens on all 8,647
+  label-set sentences, identical policy sentences in 300 speeches, and tone
+  within 0.002 on 2,000 sentences.

@@ -27,7 +27,8 @@ const STACK = [
   ["Language models", "DeepSeek V4.1 Flash and GLM 5.3 through an OpenAI-compatible API"],
   ["Local model", "fastembed (ONNX Runtime), BAAI/bge-small-en-v1.5, scikit-learn"],
   ["Statistics", "SciPy, scikit-learn: grouped cross-validation, gradient boosting, placebo tests"],
-  ["API", "FastAPI, Uvicorn, Pydantic"],
+  ["Scoring in the browser", "ONNX Runtime Web (WebAssembly), the same model file and tokenizer"],
+  ["API", "FastAPI, Uvicorn, Pydantic, for scoring from Python"],
   ["Website", "Next.js, React, TypeScript, Tailwind CSS, shadcn/ui, Recharts"],
   ["Quality", "pytest with synthetic data of known answers, ruff, ESLint"],
 ]

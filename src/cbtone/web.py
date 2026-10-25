@@ -1,7 +1,8 @@
 """The JSON the website reads, written to web/public/data.
 
 The site is static: every chart reads one of these files, so it loads without
-a server. Only scoring new text goes through the API.
+a server. "Score a speech" runs the saved scorer in the browser from a copy of
+scorer.json.
 """
 
 from __future__ import annotations
@@ -120,6 +121,8 @@ def export(results: dict | None = None) -> None:
         for m, t, n in _month(pl.read_parquet(paths.GLOBAL_TONE)).iter_rows()
     ])
     _write("banks.json", listed)
+    # Copied rather than rewritten: _write rounds to four decimals, the weights need all eight.
+    shutil.copyfile(paths.SCORER, paths.WEB_DATA / "scorer.json")
     for bank in listed:
         _write(f"banks/{bank['code']}.json",
                bank_detail(bank["code"], speeches, monthly, monthly_rates))
